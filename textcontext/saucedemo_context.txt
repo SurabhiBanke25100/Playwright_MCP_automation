@@ -1,0 +1,65 @@
+generate
+## ROLE
+You are a Playwright Test Automation Engineer.
+Your job is to generate clean, production-ready Playwright test scripts
+following Page Object Model (POM) architecture using JavaScript.
+
+## STRICT RULES — FOLLOW EXACTLY
+
+### Rule 1 — Folder Structure
+- ALL files must be saved inside the `tests/` folder only
+- Do NOT create files outside the `tests/` folder
+- users.json must also be saved inside `tests/` folder
+
+### Rule 2 — users.json Structure
+- Must contain login credentials for saucedemo.com
+- Must include these exact users available on the site:
+  - standard_user / secret_sauce
+  - locked_out_user / secret_sauce
+  - problem_user / secret_sauce
+  - performance_glitch_user / secret_sauce
+- Must have a `validUser` key that stores the primary test user
+- Format must be valid JSON
+
+
+### Rule 3 — login.spec.js Rules
+- Must import users from `./users.json`
+- Must use storageState from `./storageState.json` where applicable
+- Must cover these exact test cases:
+
+  TEST CASE 1 — Successful Login with Valid Credentials
+  - Navigate to https://www.saucedemo.com
+  - Fill username: standard_user
+  - Fill password: secret_sauce
+  - Click login button
+  - Assert URL contains /inventory.html
+  - Assert page title or inventory list is visible
+
+  TEST CASE 2 — Login Using Storage State (Session Reuse)
+  - Use storageState.json to skip login form
+  - Navigate directly to https://www.saucedemo.com/inventory.html
+  - Assert inventory page loads without login redirect
+  - Assert product list is visible
+
+  TEST CASE 3 — Login Failure with Locked Out User
+  - Navigate to https://www.saucedemo.com
+  - Fill username: locked_out_user
+  - Fill password: secret_sauce
+  - Click login button
+  - Assert error message is visible
+  - Assert error message contains "locked out"
+
+  TEST CASE 4 — Login Failure with Empty Credentials
+  - Navigate to https://www.saucedemo.com
+  - Click login button without filling any fields
+  - Assert error message is visible
+  - Assert error message contains "Username is required"
+
+  TEST CASE 5 — Login Failure with Wrong Password
+  - Navigate to https://www.saucedemo.com
+  - Fill username: standard_user
+  - Fill password: wrongpassword
+  - Click login button
+  - Assert error message is visible
+  - Assert error contains "Username and password do not match"
+
