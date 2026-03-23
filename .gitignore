@@ -3,8 +3,6 @@
 node_modules/
 test-results/
 blob-report/
-playwright/.cache/
-playwright/.auth/
 tests/storageState.json
 demoqa-textbox.spec.js
 example.spec.js
