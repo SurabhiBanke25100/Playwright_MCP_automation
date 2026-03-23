@@ -5,7 +5,13 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:       # manual trigger bhi add kiya
+  workflow_dispatch:
+
+# ✅ CHANGE 2 — Permissions add kiya
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   test:
@@ -14,35 +20,29 @@ jobs:
 
     steps:
 
-      # Step 1 - Code checkout
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 2 - Node setup
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'        # fixed version
+          node-version: '18'
 
-      # Step 3 - Dependencies install
       - name: Install Dependencies
-        run: npm install            # npm ci ki jagah
+        run: npm install
 
-      # Step 4 - Playwright browsers install
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps
 
-      # Step 5 - Storage state save ← MISSING THA TERE MEIN
+      # ✅ CHANGE 1 — saveStorageState.js kiya
       - name: Save Storage State
-        run: node tests/storageState.js
+        run: node tests/saveStorageState.js
 
-      # Step 6 - Tests run karo
       - name: Run Playwright Tests
         run: npx playwright test tests/login.spec.js
         env:
-          CI: true                  # headless mode ensure karta hai
+          CI: true
 
-      # Step 7 - Report upload
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
@@ -50,7 +50,6 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      # Step 8 - GitHub Pages ke liye report upload karo
       - name: Setup Pages
         uses: actions/configure-pages@v4
         if: ${{ !cancelled() }}
@@ -61,12 +60,9 @@ jobs:
         with:
           path: playwright-report/
 
-  # ─────────────────────────────
-  # JOB 2 — GitHub Pages Deploy
-  # ─────────────────────────────
   deploy:
     name: Deploy Report to GitHub Pages
-    needs: test          # test job complete hone ke baad chalega
+    needs: test
     runs-on: ubuntu-latest
     if: ${{ !cancelled() }}
 
@@ -77,4 +73,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4    
+        uses: actions/deploy-pages@v4
