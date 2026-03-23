@@ -34,7 +34,7 @@ jobs:
 
       # Step 5 - Storage state save ← MISSING THA TERE MEIN
       - name: Save Storage State
-        run: node tests/saveStorageState.js
+        run: node tests/storageState.js
 
       # Step 6 - Tests run karo
       - name: Run Playwright Tests
